@@ -4,7 +4,7 @@
 app_name = "fsm"
 app_title = "Erpnext Field Service Sla Dispatcher"
 app_publisher = "Shyamkumar Pandey"
-app_description = "Erpnext Field Service Sla Dispatcher for Frappe and ERPNext"
+app_description = "Erpnext Field Service Sla Dispatcher - Enterprise Multi-DocType Solution for Frappe & ERPNext"
 app_email = "shyampandey1104@gmail.com"
 app_license = "MIT"
 
@@ -16,16 +16,22 @@ app_include_js = "/assets/fsm/js/fsm.bundle.js"
 # Document Events
 # ---------------
 doc_events = {
-    "DocType Event": {
-        "on_submit": "fsm.engine.on_document_submit",
-        "on_cancel": "fsm.engine.on_document_cancel"
+    "Erpnext Field Service Sla Dispatcher Entry": {
+        "validate": "fsm.services.validator.EnterpriseValidationEngine.validate_compliance_rules",
+        "on_submit": "fsm.services.integration_service.EnterpriseIntegrationService.verify_remote_status"
     }
 }
 
-# Scheduled Tasks
-# ---------------
+# Scheduled Background Tasks
+# --------------------------
 scheduler_events = {
+    "hourly": [
+        "fsm.tasks.hourly_sync"
+    ],
     "daily": [
-        "fsm.engine.daily_scheduled_sync"
+        "fsm.tasks.daily_reconciliation"
+    ],
+    "weekly": [
+        "fsm.tasks.weekly_digest"
     ]
 }
